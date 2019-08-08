@@ -1,0 +1,41 @@
+Supplier,Commodity
+AMD,HDD
+AMD,Graphics
+AUO,CPU
+AUO,Displays
+AUO,Dell EMC XLOB Power
+AUO,Cover Glass
+Broadcom,CPU
+Broadcom,ODM
+Broadcom,Cover Glass
+catcher,Displays
+catcher,Dell EMC XLOB Power
+Compal,CPU
+Compal,ODM
+Compal,Cover Glass
+Corning,Displays
+Dell Supply,CPU
+Dell Supply,Cover Glass
+Foxconn,ODM
+Hynix,SSD
+Hynix,Memory
+Intel,SSD
+Intel,CPU
+Kingston,SSD
+Kingston,Memory
+LG Displays,Displays
+LiteOn,SSD
+Micron,SSD
+Micron,Memory
+Pegatron,ODM
+Samsung Display,Displays
+Samsung Electronics,SSD
+Samsung Electronics,Memory
+Seagate,HDD
+sharp,CPU
+sharp,Dell EMC XLOB Power
+TOSHIBA ELECTRONICS,HDD
+TOSHIBA MEMORY,SSD
+Western Digital,SSD
+Western Digital,HDD
+Wistron,ODM

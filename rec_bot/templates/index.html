@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dell REC</title>
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+    
+
+    <script>
+        $( function() {
+          var availableTags = [
+         'Gaming','Professional','Student','MacBook Pro','Aspire 3','Macbook Air','Inspiron 3567','Inspiron 7567','Inspiron 5579','Inspiron 5379','Latitude 5590','Inspiron 5570','Inspiron 3576','250 G6','XPS 13','Inspiron 5577','Inspiron 7577','Inspiron 7773','ZenBook UX430UN','XPS 15'
+    ];
+    function split( val ) {
+      return val.split( / \s*/ );
+    }
+    function extractLast( term ) {
+      return split( term ).pop();
+    }
+ 
+    $( "#btn-input" )
+      // don't navigate away from the field on tab when selecting an item
+      .on( "keydown", function( event ) {
+        if ( event.keyCode === $.ui.keyCode.TAB &&
+            $( this ).autocomplete( "instance" ).menu.active ) {
+          event.preventDefault();
+        }
+      })
+      .autocomplete({
+        minLength: 1,
+        // autoFocus: true,
+        position: { my: "left bottom", at: "left top", collision: "none" },
+        source: function( request, response ) {
+          // delegate back to autocomplete, but extract the last term
+          response( $.ui.autocomplete.filter(
+            availableTags, extractLast( request.term ) ) );
+        },
+        focus: function() {
+          // prevent value inserted on focus
+          return false;
+        },
+        select: function( event, ui ) {
+          var terms = split( this.value );
+          // remove the current input
+          terms.pop();
+          // add the selected item
+          terms.push( ui.item.value );
+          // add placeholder to get the comma-and-space at the end
+          terms.push( "" );
+          this.value = terms.join( " " );
+          return false;
+        }
+      });
+  } );
+        </script>
+    <!-- <script src="//code.jquery.com/jquery-1.11.1.min.js"></script> -->
+  </head>
+  <body>
+    <div id="bg">
+    <div id = "mainbod">
+      <div id="switchdiv">
+          <img src = "../static/delllogo_supplier.jpg" class = "dellimage">
+      </div>
+      <div id="chatbox">
+        <p class="botText"><span>Hi! I am your Personal Recommendation Chatbot</span></p>
+        <p class="botText"><span>What type of laptop are you looking for? (GAMING, PROFESSIONAL, STUDENT)</span></p>
+        
+      </div>
+     
+      <div class="input-group" id="userInput">
+          <input id="btn-input" type="text" name = "msg" class="form-control input-sm" placeholder="Type your message here..." onkeyup="getprev(event)" autofocus />
+          <span class="input-group-btn">
+              <button class="btn btn-primary btn-sm" id="btn-chat" type = "submit"  value="Send">
+                  <h5>Go</h5></button>
+          </span>
+      </div>
+
+
+
+      <script>
+            prods = ['MacBook Pro','Aspire 3','Macbook Air','Inspiron 3567','Inspiron 7567','Inspiron 5579','Inspiron 5379','Latitude 5590','Inspiron 5570','Inspiron 3576','250 G6','XPS 13','Inspiron 5577','Inspiron 7577','Inspiron 7773','ZenBook UX430UN','XPS 15']
+
+        $(document).ready(function() {
+          
+          // executes when HTML-Document is loaded and DOM is ready
+          $('#bg')
+                .animate({opacity: 0}, 'fast', function() {
+                    $(this)
+                        .css({'background-image': 'url(static/newbg1.jpg)'})
+                        .animate({opacity: 1});
+                });
+          });
+
+
+          var rawText='';
+
+
+        function getBotResponse() {
+          rawText = $("#btn-input").val();
+          rawText = rawText.trim();
+          if(rawText!=""){
+            var userHtml = '<p class="userText"><span>' + rawText + '</span></p>';
+            $("#btn-input").val("");
+            $("#chatbox").append(userHtml);
+            $('#chatbox').animate({scrollTop: $('#chatbox').prop("scrollHeight")}, 500);
+            document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+            $.get("/get", { msg: rawText }).done(function(data) {
+              var botHtml = '<p class="botText"><span>' + "Good choice! <a href='http://127.0.0.1:5000/'>Click here </a> to check Recommendations or Enter a New laptop Below" + '</span></p>';
+              $("#chatbox").append(botHtml);
+              $('#chatbox').animate({scrollTop: $('#chatbox').prop("scrollHeight")}, 500);
+              document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+              
+          });
+          }
+        }
+        function getprev(event) {
+          if(event.key === 'ArrowUp'){
+            var x = document.getElementById('btn-input').value;
+            if(x === ""){
+              $("#btn-input").val(rawText);
+            }
+          }
+        }
+
+
+        $("#btn-input").keypress(function(e) {
+            
+          if(e.which == 13) { 
+                
+            var flag=0;
+          rawText = $("#btn-input").val();
+          for(var i=0;i<prods.length;i++){
+            if(prods[i].toLowerCase()===rawText.trim().toLowerCase()){
+              // console.log(prods[i].toLowerCase());
+              // console.log(rawText.toLowerCase());
+              flag=1;
+            }
+          }
+          if(flag==1){
+            getBotResponse();
+          }
+          else{
+            var userHtml = '<p class="userText"><span>' + rawText + '</span></p>';
+            $("#btn-input").val("");
+            $("#chatbox").append(userHtml);
+            $('#chatbox').animate({scrollTop: $('#chatbox').prop("scrollHeight")}, 500);
+            document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+          
+            var userHtml = '<p class="botText"><span>' + "Now Enter your preferred laptop or <a href='http://127.0.0.1:5000/'>click here </a> to check Recommendations" + '</span></p>';
+            $("#chatbox").append(userHtml);
+            $('#chatbox').animate({scrollTop: $('#chatbox').prop("scrollHeight")}, 500);
+            document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+          
+          }
+                
+            }           
+        });
+        $("#btn-chat").click(function() {
+          var flag=0;
+          rawText = $("#btn-input").val();
+          for(var i=0;i<prods.length;i++){
+            if(prods[i].toLowerCase()===rawText.trim().toLowerCase()){
+              flag=1;
+            }
+          }
+          if(flag==1){
+            getBotResponse();
+          }
+          else{
+            var userHtml = '<p class="userText"><span>' + rawText + '</span></p>';
+            $("#btn-input").val("");
+            $("#chatbox").append(userHtml);
+            $('#chatbox').animate({scrollTop: $('#chatbox').prop("scrollHeight")}, 500);
+            document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+
+            var userHtml = '<p class="botText"><span>' + "Now Enter your preferred laptop or <a href='http://127.0.0.1:5000/'>click here </a> to check Recommendations" + '</span></p>';
+            $("#chatbox").append(userHtml);
+            $('#chatbox').animate({scrollTop: $('#chatbox').prop("scrollHeight")}, 500);
+            document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+          }
+          
+          
+        })
+
+        
+      </script>
+    </div>
+  </div>
+  </body>
+</html>
